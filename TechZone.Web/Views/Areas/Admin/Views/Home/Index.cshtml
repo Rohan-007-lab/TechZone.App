@@ -1,0 +1,214 @@
+﻿@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="bi bi-speedometer2"></i> Dashboard</h2>
+        <div class="text-muted">
+            <i class="bi bi-calendar3"></i> @DateTime.Now.ToString("MMMM dd, yyyy")
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="text-muted mb-1">Total Products</p>
+                            <h3 class="mb-0">@ViewBag.TotalProducts</h3>
+                        </div>
+                        <div class="bg-primary bg-opacity-10 p-3 rounded">
+                            <i class="bi bi-box-seam text-primary fs-3"></i>
+                        </div>
+                    </div>
+                    <a asp-area="Admin" asp-controller="Products" asp-action="Index" 
+                       class="btn btn-sm btn-outline-primary mt-3 w-100">
+                        Manage Products
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="text-muted mb-1">Total Orders</p>
+                            <h3 class="mb-0">@ViewBag.TotalOrders</h3>
+                        </div>
+                        <div class="bg-success bg-opacity-10 p-3 rounded">
+                            <i class="bi bi-bag-check text-success fs-3"></i>
+                        </div>
+                    </div>
+                    <a asp-area="Admin" asp-controller="Orders" asp-action="Index" 
+                       class="btn btn-sm btn-outline-success mt-3 w-100">
+                        View Orders
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="text-muted mb-1">Categories</p>
+                            <h3 class="mb-0">@ViewBag.TotalCategories</h3>
+                        </div>
+                        <div class="bg-info bg-opacity-10 p-3 rounded">
+                            <i class="bi bi-tags text-info fs-3"></i>
+                        </div>
+                    </div>
+                    <a asp-area="Admin" asp-controller="Categories" asp-action="Index" 
+                       class="btn btn-sm btn-outline-info mt-3 w-100">
+                        Manage Categories
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="text-muted mb-1">Total Revenue</p>
+                            <h3 class="mb-0">₹@ViewBag.TotalRevenue.ToString("N0")</h3>
+                        </div>
+                        <div class="bg-warning bg-opacity-10 p-3 rounded">
+                            <i class="bi bi-currency-rupee text-warning fs-3"></i>
+                        </div>
+                    </div>
+                    <small class="text-success">
+                        <i class="bi bi-arrow-up"></i> All time revenue
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pending Orders Alert -->
+    @if (ViewBag.PendingOrders > 0)
+    {
+        <div class="alert alert-warning d-flex align-items-center mb-4" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
+            <div class="flex-grow-1">
+                You have <strong>@ViewBag.PendingOrders pending orders</strong> that need attention.
+            </div>
+            <a asp-area="Admin" asp-controller="Orders" asp-action="Index" class="btn btn-warning btn-sm">
+                View Orders
+            </a>
+        </div>
+    }
+
+    <!-- Quick Actions & Recent Orders -->
+    <div class="row g-4">
+        <!-- Quick Actions -->
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0"><i class="bi bi-lightning-charge"></i> Quick Actions</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    <a asp-area="Admin" asp-controller="Products" asp-action="Create" 
+                       class="list-group-item list-group-item-action">
+                        <i class="bi bi-plus-circle text-primary"></i> Add New Product
+                    </a>
+                    <a asp-area="Admin" asp-controller="Categories" asp-action="Create" 
+                       class="list-group-item list-group-item-action">
+                        <i class="bi bi-folder-plus text-info"></i> Add New Category
+                    </a>
+                    <a asp-area="Admin" asp-controller="Orders" asp-action="Index" 
+                       class="list-group-item list-group-item-action">
+                        <i class="bi bi-bag text-success"></i> Manage Orders
+                    </a>
+                    <a asp-controller="Home" asp-action="Index" asp-area="" 
+                       class="list-group-item list-group-item-action">
+                        <i class="bi bi-shop text-secondary"></i> View Store
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Orders -->
+        <div class="col-md-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="bi bi-clock-history"></i> Recent Orders</h5>
+                    <a asp-area="Admin" asp-controller="Orders" asp-action="Index" 
+                       class="btn btn-sm btn-outline-light">View All</a>
+                </div>
+                <div class="card-body p-0">
+                    @if (ViewBag.RecentOrders != null && ViewBag.RecentOrders.Count > 0)
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Order #</th>
+                                        <th>Date</th>
+                                        <th>Customer</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var order in ViewBag.RecentOrders)
+                                    {
+                                        <tr>
+                                            <td><strong>@order.OrderNumber</strong></td>
+                                            <td>@order.OrderDate.ToString("dd/MM/yyyy")</td>
+                                            <td>@order.ShippingFirstName @order.ShippingLastName</td>
+                                            <td class="text-primary fw-bold">₹@order.TotalAmount.ToString("N0")</td>
+                                            <td>
+                                                <span class="badge bg-@GetStatusColor(order.Status)">
+                                                    @order.Status
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <a asp-area="Admin" asp-controller="Orders" asp-action="Details" 
+                                                   asp-route-id="@order.Id" class="btn btn-sm btn-outline-primary">
+                                                    <i class="bi bi-eye"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="p-4 text-center text-muted">
+                            <i class="bi bi-inbox fs-1"></i>
+                            <p class="mb-0">No recent orders</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@functions {
+    string GetStatusColor(TechZone.Domain.Enums.OrderStatus status)
+    {
+        return status switch
+        {
+            TechZone.Domain.Enums.OrderStatus.Pending => "warning",
+            TechZone.Domain.Enums.OrderStatus.Confirmed => "info",
+            TechZone.Domain.Enums.OrderStatus.Processing => "info",
+            TechZone.Domain.Enums.OrderStatus.Shipped => "primary",
+            TechZone.Domain.Enums.OrderStatus.Delivered => "success",
+            TechZone.Domain.Enums.OrderStatus.Cancelled => "danger",
+            _ => "secondary"
+        };
+    }
+}

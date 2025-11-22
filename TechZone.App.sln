@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.14.36518.9
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechZone.API", "TechZone.API\TechZone.API.csproj", "{998D4CBF-0155-4A66-A0A5-8630CCA2AF7D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9F7390BF-713A-4097-B741-C1B4292C5205} = {9F7390BF-713A-4097-B741-C1B4292C5205}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechZone.Web", "TechZone.Web\TechZone.Web.csproj", "{89A63E1A-7030-4453-AB04-DAB7A4C9E566}"
 EndProject

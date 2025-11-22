@@ -22,7 +22,7 @@ namespace TechZone.Application.Interfaces
     /// </summary>
     public interface IOrderService
     {
-        Task<OrderDto> CreateOrderAsync(CreateOrderDto dto);
+       Task<OrderDto> CreateOrderAsync(CreateOrderDto dto);
         Task<OrderDto?> GetOrderByIdAsync(int id);
         Task<List<OrderDto>> GetUserOrdersAsync(string userId);
         Task<PagedResponse<OrderDto>> GetAllOrdersAsync(int pageNumber, int pageSize);
@@ -40,6 +40,7 @@ namespace TechZone.Application.Interfaces
         Task<CartDto> UpdateCartItemAsync(UpdateCartItemDto dto);
         Task<bool> RemoveFromCartAsync(int cartItemId);
         Task<bool> ClearCartAsync(string userId);
+        Task<IEnumerable<object>> GetCartItemsAsync(string userId);
     }
 
     /// <summary>

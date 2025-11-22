@@ -1,0 +1,201 @@
+﻿@model TechZone.Application.DTOs.ProductDto
+@using TechZone.Domain.Enums
+@{
+    ViewData["Title"] = Model.Name;
+
+    // Discount percentage calculation (decimal → double issue fixed)
+    var discountPercentage = Model.DiscountPrice.HasValue
+        ? (int)Math.Round((double)(Model.Price - Model.DiscountPrice.Value) / (double)Model.Price * 100)
+        : 0;
+
+    // Rating logic (clean & safe)
+    var fullStars = (int)Model.AverageRating;
+    var hasHalfStar = Model.AverageRating - fullStars >= 0.5m;
+    var emptyStars = 5 - (int)Math.Ceiling(Model.AverageRating);
+}
+
+<div class="container my-5">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+            <li class="breadcrumb-item"><a asp-controller="Products" asp-action="Index">Products</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@Model.Name</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <!-- Product Image -->
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm">
+                <img src="@(Model.ImageUrl ?? "https://via.placeholder.com/600x600?text=" + Uri.EscapeDataString(Model.Name))"
+                     class="card-img-top p-4" alt="@Model.Name" style="height: 500px; object-fit: contain; background:#f8f9fa;">
+            </div>
+
+            @if (Model.Images != null && Model.Images.Any())
+            {
+                <div class="row mt-3 g-2">
+                    @foreach (var img in Model.Images.Take(4))
+                    {
+                        <div class="col-3">
+                            <img src="@img" class="img-thumbnail border" alt="Thumbnail"
+                                 style="height: 100px; object-fit: cover; cursor: pointer;">
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+
+        <!-- Product Info -->
+        <div class="col-md-6">
+            <div class="mb-3">
+                @if (Model.IsFeatured)
+                {
+                    <span class="badge bg-warning text-dark me-2">Featured</span>
+                }
+                @if (Model.DiscountPrice.HasValue)
+                {
+                    <span class="badge bg-danger">On Sale</span>
+                }
+            </div>
+
+            <h1 class="mb-3">@Model.Name</h1>
+
+            <!-- Rating -->
+            @if (Model.ReviewCount > 0)
+            {
+                <div class="mb-3">
+                    <span class="text-warning fs-5">
+                        @for (int i = 0; i < fullStars; i++)
+                        {
+                            <i class="bi bi-star-fill"></i>
+                        }
+                        @if (hasHalfStar)
+                        {
+                            <i class="bi bi-star-half"></i>
+                        }
+                        @for (int i = 0; i < emptyStars; i++)
+                        {
+                            <i class="bi bi-star"></i>
+                        }
+                    </span>
+                    <span class="text-muted ms-2">
+                        @Model.AverageRating.ToString("0.0") (@Model.ReviewCount reviews)
+                    </span>
+                </div>
+            }
+
+            <!-- Price -->
+            <div class="mb-4">
+                @if (Model.DiscountPrice.HasValue)
+                {
+                    <h3 class="text-primary mb-0">₹@Model.DiscountPrice.Value:N0</h3>
+                    <p class="text-muted">
+                        <del>₹@Model.Price:N0</del>
+                        <span class="badge bg-success ms-2">Save @discountPercentage%</span>
+                    </p>
+                }
+                else
+                {
+                    <h3 class="text-primary">₹@Model.Price:N0</h3>
+                }
+            </div>
+
+            <!-- Short Description -->
+            <div class="mb-4">
+                <h5>Description</h5>
+                <p class="text-muted">@Model.ShortDescription</p>
+            </div>
+
+            <!-- Stock -->
+            <div class="mb-4">
+                @if (Model.StockQuantity > 0)
+                {
+                    <span class="badge bg-success fs-6">
+                        In Stock (@Model.StockQuantity available)
+                    </span>
+                }
+                else
+                {
+                    <span class="badge bg-danger fs-6">
+                        Out of Stock
+                    </span>
+                }
+            </div>
+
+            <!-- Add to Cart -->
+            @if (Model.StockQuantity > 0)
+            {
+                <form asp-controller="Cart" asp-action="Add" method="post" class="mb-4">
+                    <input type="hidden" name="productId" value="@Model.Id" />
+                    <div class="row mb-3 align-items-end">
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">Quantity</label>
+                            <input type="number" name="quantity" class="form-control" value="1"
+                                   min="1" max="@Model.StockQuantity" required />
+                        </div>
+                        <div class="col-md-8">
+                            <button type="submit" class="btn btn-primary btn-lg px-5">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            }
+            else
+            {
+                <button class="btn btn-secondary btn-lg w-100" disabled>Out of Stock</button>
+            }
+
+            <!-- Product Details Table -->
+            <div class="mt-5">
+                <h5>Product Details</h5>
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr>
+                            <th width="150">SKU</th>
+                            <td>@Model.SKU</td>
+                        </tr>
+                        <tr>
+                            <th>Brand</th>
+                            <td>@(Model.Brand ?? "N/A")</td>
+                        </tr>
+                        <tr>
+                            <th>Category</th>
+                            <td>@Model.CategoryName</td>
+                        </tr>
+                        <tr>
+                            <th>Status</th>
+                            <td>
+                                <span class="badge bg-@(Model.Status == ProductStatus.Active ? "success" : "secondary")">
+                                    @Model.Status
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" data-bs-toggle="tab" href="#description">Full Description</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#reviews">Reviews (@Model.ReviewCount)</a>
+                </li>
+            </ul>
+            <div class="tab-content border border-top-0 p-4 bg-light">
+                <div id="description" class="tab-pane fade show active">
+                    <p>@Model.Description</p>
+                </div>
+                <div id="reviews" class="tab-pane fade">
+                    <p class="text-muted">Reviews will appear here soon.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

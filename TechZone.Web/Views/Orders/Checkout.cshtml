@@ -1,0 +1,238 @@
+﻿@* @model TechZone.Application.DTOs.CreateOrderDto
+@{
+    ViewData["Title"] = "Checkout";
+    var cart = ViewBag.Cart as TechZone.Application.DTOs.CartDto;
+}
+
+<div class="container my-5">
+    <h2 class="mb-4">
+        <i class="bi bi-credit-card"></i> Checkout
+    </h2>
+
+    <form asp-action="Checkout" method="post">
+        <div class="row">
+            <!-- Shipping & Payment Details -->
+            <div class="col-lg-7">
+                <!-- Shipping Address -->
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="bi bi-truck"></i> Shipping Address</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="ShippingFirstName" class="form-label">First Name *</label>
+                                <input asp-for="ShippingFirstName" class="form-control" required />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="ShippingLastName" class="form-label">Last Name *</label>
+                                <input asp-for="ShippingLastName" class="form-control" required />
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="ShippingEmail" class="form-label">Email *</label>
+                                <input asp-for="ShippingEmail" type="email" class="form-control" required />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="ShippingPhone" class="form-label">Phone *</label>
+                                <input asp-for="ShippingPhone" class="form-control" required />
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="ShippingAddress" class="form-label">Address *</label>
+                            <input asp-for="ShippingAddress" class="form-control" 
+                                   placeholder="Street address" required />
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="ShippingCity" class="form-label">City *</label>
+                                <input asp-for="ShippingCity" class="form-control" required />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="ShippingState" class="form-label">State *</label>
+                                <input asp-for="ShippingState" class="form-control" required />
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="ShippingZipCode" class="form-label">ZIP Code *</label>
+                                <input asp-for="ShippingZipCode" class="form-control" required />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="ShippingCountry" class="form-label">Country *</label>
+                                <input asp-for="ShippingCountry" class="form-control" value="India" required />
+                            </div>
+                        </div>
+
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="sameAsBilling" checked 
+                                   onchange="toggleBillingAddress()">
+                            <label class="form-check-label" for="sameAsBilling">
+                                Billing address same as shipping
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Billing Address (Hidden by default) -->
+                <div class="card mb-4" id="billingAddressCard" style="display: none;">
+                    <div class="card-header bg-secondary text-white">
+                        <h5 class="mb-0"><i class="bi bi-receipt"></i> Billing Address</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="BillingFirstName" class="form-label">First Name</label>
+                                <input asp-for="BillingFirstName" class="form-control" />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="BillingLastName" class="form-label">Last Name</label>
+                                <input asp-for="BillingLastName" class="form-control" />
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="BillingAddress" class="form-label">Address</label>
+                            <input asp-for="BillingAddress" class="form-control" />
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="BillingCity" class="form-label">City</label>
+                                <input asp-for="BillingCity" class="form-control" />
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="BillingState" class="form-label">State</label>
+                                <input asp-for="BillingState" class="form-control" />
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="BillingZipCode" class="form-label">ZIP Code</label>
+                                <input asp-for="BillingZipCode" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Method -->
+                <div class="card mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0"><i class="bi bi-credit-card"></i> Payment Method</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-check mb-2">
+                            <input asp-for="PaymentMethod" type="radio" class="form-check-input" 
+                                   value="1" id="creditCard" checked>
+                            <label class="form-check-label" for="creditCard">
+                                <i class="bi bi-credit-card"></i> Credit Card
+                            </label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input asp-for="PaymentMethod" type="radio" class="form-check-input" 
+                                   value="2" id="debitCard">
+                            <label class="form-check-label" for="debitCard">
+                                <i class="bi bi-credit-card-2-front"></i> Debit Card
+                            </label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input asp-for="PaymentMethod" type="radio" class="form-check-input" 
+                                   value="5" id="cod">
+                            <label class="form-check-label" for="cod">
+                                <i class="bi bi-cash"></i> Cash on Delivery
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notes -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <label asp-for="Notes" class="form-label">Order Notes (Optional)</label>
+                        <textarea asp-for="Notes" class="form-control" rows="3" 
+                                  placeholder="Any special instructions..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="col-lg-5">
+                <div class="card mb-4 position-sticky" style="top: 20px;">
+                    <div class="card-header bg-dark text-white">
+                        <h5 class="mb-0">Order Summary</h5>
+                    </div>
+                    <div class="card-body">
+                        <h6 class="mb-3">Items (@cart.ItemCount)</h6>
+                        @foreach (var item in cart.CartItems)
+                        {
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-muted">
+                                    @item.ProductName × @item.Quantity
+                                </span>
+                                <span>₹@item.TotalPrice.ToString("N0")</span>
+                            </div>
+                        }
+
+                        <hr>
+
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Subtotal</span>
+                            <strong>₹@cart.SubTotal.ToString("N0")</strong>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Shipping</span>
+                            <span>₹50</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3">
+                            <span>Tax (18%)</span>
+                            <span>₹@((cart.SubTotal * 0.18m).ToString("N0"))</span>
+                        </div>
+
+                        <hr>
+
+                        <div class="d-flex justify-content-between mb-4">
+                            <h5>Total</h5>
+                            <h5 class="text-primary">₹@((cart.SubTotal * 1.18m + 50).ToString("N0"))</h5>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100 py-3">
+                            <i class="bi bi-lock"></i> Place Order
+                        </button>
+
+                        <div class="text-center mt-3">
+                            <small class="text-muted">
+                                <i class="bi bi-shield-check text-success"></i> 
+                                Your payment information is secure
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        function toggleBillingAddress() {
+            var checkbox = document.getElementById('sameAsBilling');
+            var billingCard = document.getElementById('billingAddressCard');
+            
+            if (checkbox.checked) {
+                billingCard.style.display = 'none';
+                // Copy shipping to billing
+                document.getElementById('BillingFirstName').value = document.getElementById('ShippingFirstName').value;
+                document.getElementById('BillingLastName').value = document.getElementById('ShippingLastName').value;
+                document.getElementById('BillingAddress').value = document.getElementById('ShippingAddress').value;
+                document.getElementById('BillingCity').value = document.getElementById('ShippingCity').value;
+                document.getElementById('BillingState').value = document.getElementById('ShippingState').value;
+                document.getElementById('BillingZipCode').value = document.getElementById('ShippingZipCode').value;
+            } else {
+                billingCard.style.display = 'block';
+            }
+        }
+    </script>
+} *@

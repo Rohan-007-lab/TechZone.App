@@ -1,0 +1,123 @@
+﻿@model TechZone.Application.DTOs.UpdateProfileDto
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+<div class="container my-5">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3">
+            <div class="list-group">
+                <a asp-action="Profile" class="list-group-item list-group-item-action active">
+                    <i class="bi bi-person"></i> My Profile
+                </a>
+                <a asp-controller="Orders" asp-action="MyOrders" class="list-group-item list-group-item-action">
+                    <i class="bi bi-bag"></i> My Orders
+                </a>
+                <a asp-action="ChangePassword" class="list-group-item list-group-item-action">
+                    <i class="bi bi-key"></i> Change Password
+                </a>
+                <a href="#" class="list-group-item list-group-item-action">
+                    <i class="bi bi-heart"></i> Wishlist
+                </a>
+                <form asp-action="Logout" method="post" class="d-inline w-100">
+                    <button type="submit" class="list-group-item list-group-item-action text-danger border-0 w-100 text-start">
+                        <i class="bi bi-box-arrow-right"></i> Logout
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Profile Content -->
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="bi bi-person-circle"></i> My Profile</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Profile" method="post">
+                        <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="FirstName" class="form-label">First Name *</label>
+                                <input asp-for="FirstName" class="form-control" placeholder="Enter first name" />
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="LastName" class="form-label">Last Name *</label>
+                                <input asp-for="LastName" class="form-control" placeholder="Enter last name" />
+                                <span asp-validation-for="LastName" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="PhoneNumber" class="form-label">Phone Number *</label>
+                                <input asp-for="PhoneNumber" class="form-control" placeholder="1234567890" />
+                                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="DateOfBirth" class="form-label">Date of Birth</label>
+                                <input asp-for="DateOfBirth" type="date" class="form-control" />
+                                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" class="form-control" value="@User.Identity?.Name" disabled />
+                            <small class="text-muted">Email cannot be changed</small>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-save"></i> Save Changes
+                            </button>
+                            <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">
+                                Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Account Stats -->
+            <div class="row mt-4">
+                <div class="col-md-4">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <i class="bi bi-bag-check display-4 text-primary"></i>
+                            <h3 class="mt-2">0</h3>
+                            <p class="text-muted mb-0">Total Orders</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <i class="bi bi-heart display-4 text-danger"></i>
+                            <h3 class="mt-2">0</h3>
+                            <p class="text-muted mb-0">Wishlist Items</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <i class="bi bi-star display-4 text-warning"></i>
+                            <h3 class="mt-2">0</h3>
+                            <p class="text-muted mb-0">Reviews</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

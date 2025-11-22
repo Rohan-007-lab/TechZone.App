@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TechZone.Application.DTOs;
 using TechZone.Application.Interfaces;
+using TechZone.Application.DTOs;
+
 
 namespace TechZone.Web.Controllers
 {

@@ -1,0 +1,112 @@
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<h1>Admin Dashboard - Working!</h1>
+
+<h1 style='color:green; text-align:center; margin-top:100px; font-size:50px;'>Admin Dashboard - Working!</h1>
+<p style='text-align:center; font-size:30px;'>तुझा Admin Panel आता परफेक्ट चालतोय!</p>
+
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="container-fluid">
+    <h2 class="mb-4">
+        <i class="bi bi-speedometer2"></i> Dashboard
+    </h2>
+
+    <!-- Statistics Cards -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100 bg-primary text-white">
+                <div class="card-body text-center">
+                    <i class="bi bi-box-seam display-4 mb-3"></i>
+                    <h3>@ViewBag.TotalProducts</h3>
+                    <p class="mb-0">Total Products</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100 bg-success text-white">
+                <div class="card-body text-center">
+                    <i class="bi bi-bag-check display-4 mb-3"></i>
+                    <h3>@ViewBag.TotalOrders</h3>
+                    <p class="mb-0">Total Orders</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100 bg-info text-white">
+                <div class="card-body text-center">
+                    <i class="bi bi-tags display-4 mb-3"></i>
+                    <h3>@ViewBag.TotalCategories</h3>
+                    <p class="mb-0">Categories</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100 bg-warning text-white">
+                <div class="card-body text-center">
+                    <i class="bi bi-currency-rupee display-4 mb-3"></i>
+                    <h3>₹@ViewBag.TotalRevenue.ToString("N0")</h3>
+                    <p class="mb-0">Total Revenue</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0"><i class="bi bi-lightning-charge"></i> Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-3 mb-3">
+                            <a asp-area="Admin" asp-controller="Products" asp-action="Create" 
+                               class="btn btn-primary btn-lg w-100">
+                                <i class="bi bi-plus-circle"></i><br>Add Product
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a asp-area="Admin" asp-controller="Categories" asp-action="Create" 
+                               class="btn btn-info btn-lg w-100">
+                                <i class="bi bi-folder-plus"></i><br>Add Category
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a asp-area="Admin" asp-controller="Orders" asp-action="Index" 
+                               class="btn btn-success btn-lg w-100">
+                                <i class="bi bi-bag"></i><br>View Orders
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a asp-area="" asp-controller="Home" asp-action="Index" target="_blank"
+                               class="btn btn-secondary btn-lg w-100">
+                                <i class="bi bi-shop"></i><br>View Store
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Welcome Message -->
+    <div class="alert alert-info mt-4">
+        <h4 class="alert-heading">
+            <i class="bi bi-info-circle"></i> Welcome to TechZone Admin Panel!
+        </h4>
+        <p>Manage your e-commerce store from this dashboard. You can add products, manage orders, and view reports.</p>
+        <hr>
+        <p class="mb-0">
+            <strong>Logged in as:</strong> @User.Identity?.Name
+        </p>
+    </div>
+</div>

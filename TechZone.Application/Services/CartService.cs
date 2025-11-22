@@ -148,5 +148,10 @@ namespace TechZone.Application.Services
             await _unitOfWork.SaveChangesAsync();
             return true;
         }
+
+        public Task<IEnumerable<object>> GetCartItemsAsync(string userId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

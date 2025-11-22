@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TechZone.Domain.Entities;
 using TechZone.Domain.Interfaces;
@@ -8,6 +8,9 @@ using TechZone.Application.Interfaces;
 using TechZone.Application.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -54,7 +57,7 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 // Application Services
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICartService, CartService>();
-builder.Services.AddScoped<IOrderService, OrderService>();
+//builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IReviewService, ReviewService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
@@ -104,6 +107,12 @@ app.UseRouting();
 app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
+
+// Admin Area Route
+// हे दोन्ही routes एकदम वरच्या क्रमाने ठेव
+app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller=AdminHome}/{action=Index}/{id?}");
 
 app.MapControllerRoute(
     name: "default",
