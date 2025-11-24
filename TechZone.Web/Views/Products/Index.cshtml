@@ -1,0 +1,90 @@
+﻿@model TechZone.Application.DTOs.PagedResponse<TechZone.Application.DTOs.ProductListDto>
+@{
+    ViewData["Title"] = "Products";
+}
+
+<div class="container my-4">
+    <h2 class="mb-4">All Products</h2>
+    
+    <!-- Filter Section -->
+    <form method="get" class="row g-3 mb-4">
+        <div class="col-md-4">
+            <input type="text" class="form-control" name="searchTerm" 
+                   placeholder="Search products..." value="@ViewBag.SearchTerm" />
+        </div>
+        <div class="col-md-3">
+            <select class="form-select" name="categoryId">
+                <option value="">All Categories</option>
+                @if(ViewBag.Categories != null)
+                {
+                    foreach(var cat in ViewBag.Categories)
+                    {
+                        <option value="@cat.Id" selected="@(ViewBag.CategoryId == cat.Id)">
+                            @cat.Name
+                        </option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">
+                <i class="bi bi-search"></i> Search
+            </button>
+        </div>
+    </form>
+
+    <!-- Products Grid -->
+    <div class="row g-4">
+        @foreach(var product in Model.Items)
+        {
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100">
+                    <img src="@(product.ImageUrl ?? "https://via.placeholder.com/300")" 
+                         class="card-img-top" alt="@product.Name" style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h6 class="card-title">@product.Name</h6>
+                        @if (product.DiscountPrice.HasValue)
+                        {
+                            <p class="mb-1">
+                                <del class="text-muted">₹@product.Price.ToString("N0")</del>
+                            </p>
+                            <p class="text-primary fw-bold fs-5">₹@product.DiscountPrice.Value.ToString("N0")</p>
+                        }
+                        else
+                        {
+                            <p class="text-primary fw-bold fs-5">₹@product.Price.ToString("N0")</p>
+                        }
+                        @if (product.AverageRating > 0)
+                        {
+                            <small class="text-warning">
+                                <i class="bi bi-star-fill"></i> @product.AverageRating.ToString("0.0")
+                            </small>
+                        }
+                    </div>
+                    <div class="card-footer bg-white">
+                        <a asp-action="Details" asp-route-id="@product.Id" class="btn btn-primary w-100">
+                            View Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Pagination -->
+    @if(Model.TotalPages > 1)
+    {
+        <nav class="mt-4">
+            <ul class="pagination justify-content-center">
+                @for(int i = 1; i <= Model.TotalPages; i++)
+                {
+                    <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                        <a class="page-link" href="?pageNumber=@i&searchTerm=@ViewBag.SearchTerm&categoryId=@ViewBag.CategoryId">
+                            @i
+                        </a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    }
+</div>
