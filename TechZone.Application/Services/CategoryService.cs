@@ -15,7 +15,7 @@ namespace TechZone.Application.Services
         }
 
         public async Task<List<CategoryDto>> GetAllCategoriesAsync()
-        {
+        { 
             var categories = await _unitOfWork.Repository<Category>().GetAllAsync();
             var products = await _unitOfWork.Repository<Product>().GetAllAsync();
 
